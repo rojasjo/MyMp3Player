@@ -5,19 +5,18 @@ namespace MyMp3Player;
 
 public partial class MainPage : ContentPage
 {
-    private readonly MainPageViewModel _mainPageViewModel;
-    private readonly AudioManager _audioManager;
+    private readonly IMainPageViewModel _mainPageViewModel;
 
-    public MainPage(AudioManager audioManager)
+    public MainPage(IMainPageViewModel mainPageViewModel)
     {
         InitializeComponent();
-        
-        _audioManager = audioManager;
-        _mainPageViewModel = new MainPageViewModel();
+
+        _mainPageViewModel = mainPageViewModel;
     }
 
     private async void OnPlayClicked(object sender, EventArgs e)
     {
-        await _mainPageViewModel.Play(_audioManager);
+        //TODO: get the file name dynamically.
+        await _mainPageViewModel.Play("run-staccato-string.mp3");
     }
 }

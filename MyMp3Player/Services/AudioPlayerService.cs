@@ -2,12 +2,18 @@ using Plugin.Maui.Audio;
 
 namespace MyMp3Player.Services;
 
-public class AudioPlayerService
+public class AudioPlayerService : IAudioPlayerService
 {
-    public async Task Play(AudioManager audioManager)
+    private readonly IAudioManager _audioManager;
+
+    public AudioPlayerService(IAudioManager audioManager)
     {
-        var file = await FileSystem.OpenAppPackageFileAsync("Audio/run-staccato-string.mp3");
-        var player = audioManager.CreatePlayer(file);
+        _audioManager = audioManager;
+    }
+    
+    public void Play(Stream audioStream)
+    {
+        var player = _audioManager.CreatePlayer(audioStream);
         player.Play();
     }
 }

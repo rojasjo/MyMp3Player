@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
+using MyMp3Player.Services;
+using MyMp3Player.ViewModel;
 using Plugin.Maui.Audio;
 
 namespace MyMp3Player;
@@ -16,7 +18,10 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
 
-        builder.Services.AddSingleton<AudioManager>(AudioManager.Current as AudioManager);
+        builder.Services.AddSingleton(AudioManager.Current);
+        builder.Services.AddTransient<IAudioFileStreamProvider, AudioFileStreamProvider>();
+        builder.Services.AddTransient<IAudioPlayerService, AudioPlayerService>();
+        builder.Services.AddTransient<IMainPageViewModel, MainPageViewModel>();
         builder.Services.AddTransient<MainPage>();
 
 #if DEBUG

@@ -1,13 +1,21 @@
 using MyMp3Player.Services;
-using Plugin.Maui.Audio;
 
 namespace MyMp3Player.ViewModel;
 
-public class MainPageViewModel
+public class MainPageViewModel : IMainPageViewModel
 {
-    public Task Play(AudioManager audioManager)
+    private readonly IAudioFileStreamProvider _audioFileStreamProvider;
+    private readonly IAudioPlayerService _audioPlayerService;
+
+    public MainPageViewModel(IAudioFileStreamProvider audioFileStreamProvider, IAudioPlayerService audioPlayerService)
     {
-        var audioPlayer = new AudioPlayerService();
-        return audioPlayer.Play(audioManager);
+        _audioFileStreamProvider = audioFileStreamProvider;
+        _audioPlayerService = audioPlayerService;
+    }
+    
+    public async Task Play(string audioFile)
+    {
+        var stream = await _audioFileStreamProvider.GetStream(audioFile);
+        _audioPlayerService.Play(stream);
     }
 }
