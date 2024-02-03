@@ -1,23 +1,23 @@
-﻿using Plugin.Maui.Audio;
+﻿using MyMp3Player.ViewModel;
+using Plugin.Maui.Audio;
 
 namespace MyMp3Player;
 
 public partial class MainPage : ContentPage
 {
-    int count = 0;
+    private readonly MainPageViewModel _mainPageViewModel;
     private readonly IAudioManager _audioManager;
 
     public MainPage(IAudioManager audioManager)
     {
         InitializeComponent();
-
+        
         _audioManager = audioManager;
+        _mainPageViewModel = new MainPageViewModel();
     }
 
-    private async void OnCounterClicked(object sender, EventArgs e)
+    private async void OnPlayClicked(object sender, EventArgs e)
     {
-        var file = await FileSystem.OpenAppPackageFileAsync("Audio/01-Cenerentola.mp3");
-        var player = _audioManager.CreatePlayer(file);
-        player.Play();
+        await _mainPageViewModel.Play(_audioManager);
     }
 }
