@@ -6,9 +6,9 @@ namespace MyMp3Player;
 public partial class MainPage : ContentPage
 {
     private readonly MainPageViewModel _mainPageViewModel;
-    private readonly IAudioManager _audioManager;
+    private readonly AudioManager _audioManager;
 
-    public MainPage(IAudioManager audioManager)
+    public MainPage(AudioManager audioManager)
     {
         InitializeComponent();
         

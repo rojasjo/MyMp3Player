@@ -5,7 +5,7 @@ namespace MyMp3Player.ViewModel;
 
 public class MainPageViewModel
 {
-    public Task Play(IAudioManager audioManager)
+    public Task Play(AudioManager audioManager)
     {
         var audioPlayer = new AudioPlayerService();
         return audioPlayer.Play(audioManager);
