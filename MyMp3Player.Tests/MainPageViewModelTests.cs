@@ -9,40 +9,52 @@ namespace MyMp3Player.Tests;
 public class MainPageViewModelTests
 {
     private MainPageViewModel? _sut;
-    
+
     private Mock<IAudioFileStreamProvider>? _audioFileStreamProviderMock;
     private Mock<IAudioPlayerService>? _audioPlayerServiceMock;
-    
+
     [SetUp]
     public void Setup()
     {
         _audioFileStreamProviderMock = new Mock<IAudioFileStreamProvider>();
         _audioPlayerServiceMock = new Mock<IAudioPlayerService>();
-        
+
         _sut = new MainPageViewModel(_audioFileStreamProviderMock.Object, _audioPlayerServiceMock.Object);
     }
-    
+
     [Test]
     public async Task Play_NoOtherSoundIsPlaying_NoExceptionAreThrown()
     {
         Assert.DoesNotThrowAsync(async () => await _sut.Play("test"));
     }
-    
+
     [Test]
     public async Task Play_FileIsNotFound_ThrowsCannotReproduceAudioException()
     {
-        _audioFileStreamProviderMock.Setup(p => p.GetStream(It.IsAny<string>() ))
+        _audioFileStreamProviderMock.Setup(p => p.GetStream(It.IsAny<string>()))
             .ThrowsAsync(new FileNotFoundException());
-        
+
         Assert.ThrowsAsync<CannotReproduceAudioException>(async () => await _sut.Play("test"));
     }
-    
+
     [Test]
     public async Task Play_AudioManagerFails_ThrowsCannotReproduceAudioException()
     {
-        _audioPlayerServiceMock.Setup(p => p.Play(It.IsAny<Stream>() ))
+        _audioPlayerServiceMock.Setup(p => p.Play(It.IsAny<Stream>()))
             .Throws<InvalidDataException>();
-        
+
         Assert.ThrowsAsync<CannotReproduceAudioException>(async () => await _sut.Play("test"));
+    }
+
+    [Test]
+    public async Task Play_Always_GetStreamIsCalledOnce()
+    {
+        await _sut.Play("test");
+
+        Assert.Multiple(() =>
+        {
+            _audioFileStreamProviderMock.Verify(p => p.GetStream(It.Is<string>(p => p == "test")), Times.Once);
+            _audioFileStreamProviderMock.Verify(p => p.GetStream(It.IsAny<string>()), Times.Once);
+        });
     }
 }
