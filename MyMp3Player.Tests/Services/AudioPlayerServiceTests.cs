@@ -48,7 +48,7 @@ public class AudioPlayerServiceTests
         Assert.Multiple(() =>
         {
             Assert.That(songEndedInvoked, Is.True);
-            playerMock.VerifyRemove(p => p.PlaybackEnded -= It.IsAny<EventHandler>());
+            playerMock.VerifyRemove(p => p.PlaybackEnded -= It.IsAny<EventHandler>(), Times.Never);
         });
     }
 }

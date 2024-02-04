@@ -17,19 +17,18 @@ public class AudioPlayerService : IAudioPlayerService
         _players = new Dictionary<string, IAudioPlayer>();
     }
 
-    public void Play(string name, Stream audioStream)
+    public void Play(string name, Stream? audioStream = null)
     {
         if (!_players.TryGetValue(name, out var audioPlayer))
         {
             audioPlayer = _audioManager.CreatePlayer(audioStream);
             _players[name] = audioPlayer;
+            audioPlayer.PlaybackEnded += PlayerOnPlaybackEnded;
         }
         
         var playing = _players.FirstOrDefault(p => p.Value.IsPlaying).Value;
         playing?.Stop();
         
-        audioPlayer.PlaybackEnded += PlayerOnPlaybackEnded;
-
         audioPlayer.Play();
         _currentSong = name;
     }
@@ -37,7 +36,5 @@ public class AudioPlayerService : IAudioPlayerService
     private void PlayerOnPlaybackEnded(object? sender, EventArgs e)
     {
         SongEnded?.Invoke();
-        
-        _players[_currentSong].PlaybackEnded -= PlayerOnPlaybackEnded;
     }
 }
