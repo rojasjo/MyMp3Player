@@ -2,5 +2,7 @@ namespace MyMp3Player.Services;
 
 public interface IAudioPlayerService
 {
-    void Play(Stream audioStream);
+    void Play(string name, Stream audioStream);
+
+    event Action SongEnded;
 }

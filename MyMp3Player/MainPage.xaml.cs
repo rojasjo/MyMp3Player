@@ -1,4 +1,4 @@
-﻿using MyMp3Player.ViewModel;
+﻿using MyMp3Player.ViewModels;
 using Plugin.Maui.Audio;
 
 namespace MyMp3Player;
@@ -9,14 +9,15 @@ public partial class MainPage : ContentPage
 
     public MainPage(IMainPageViewModel mainPageViewModel)
     {
-        InitializeComponent();
-
         _mainPageViewModel = mainPageViewModel;
+        
+        InitializeComponent();
+        BindingContext = _mainPageViewModel;
     }
-
-    private async void OnPlayClicked(object sender, EventArgs e)
+    
+    protected override async void OnAppearing()
     {
-        //TODO: get the file name dynamically.
-        await _mainPageViewModel.Play("run-staccato-string.mp3");
+        base.OnAppearing();
+        await _mainPageViewModel.Load();
     }
 }

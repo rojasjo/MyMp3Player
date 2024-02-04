@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using MyMp3Player.Services;
-using MyMp3Player.ViewModel;
+using MyMp3Player.ViewModels;
 using Plugin.Maui.Audio;
 
 namespace MyMp3Player;
@@ -22,6 +22,7 @@ public static class MauiProgram
         builder.Services.AddTransient<IAudioFileStreamProvider, AudioFileStreamProvider>();
         builder.Services.AddTransient<IAudioPlayerService, AudioPlayerService>();
         builder.Services.AddTransient<IMainPageViewModel, MainPageViewModel>();
+        builder.Services.AddTransient<IDataService, LocalDataService>();
         builder.Services.AddTransient<MainPage>();
 
 #if DEBUG
